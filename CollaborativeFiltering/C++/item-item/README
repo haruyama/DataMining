@@ -1,0 +1,11 @@
+- dense: memoize tanimoto(i, j) with boost::multi_array;
+- sparse: memoize tanimoto(i, j) with unorder_map;
+- nomemo: don't memoize 
+
+performance:
+(Mahout >>) dense > nomemo > sparse
+
+(Mahout 0.4 generates incorrect results sometimes.)
+
+memory:
+nomemo > dense, sparse
