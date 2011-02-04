@@ -1,0 +1,17 @@
+# CFLAGS +=
+# ASFLAGS +=
+# LDFLAGS +=
+INCLUDES += ../../../include
+
+################################################
+# Uncomment the following section if you want
+# to build a C program in the current directory.
+#
+
+SRCS = test_csv
+#    main
+#
+MAIN = test_csv
+#
+.DEFAULT: $(CXXProgram $(MAIN), $(SRCS))
+	./test_csv
