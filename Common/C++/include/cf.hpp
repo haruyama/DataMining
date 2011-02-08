@@ -35,7 +35,10 @@ namespace cf {
         
         cache_array_ptr memo;
 
-        memo = cache_array_ptr(new multi_array<double, 2>(extents[items.size()][items.size()]));
+        if (cache) {
+            memo = cache_array_ptr(new multi_array<double, 2>(extents[items.size()][items.size()]));
+        }
+        
 
         typedef ptr_container_detail::ref_pair<IT, const set<UT>* const> item_info;
 
