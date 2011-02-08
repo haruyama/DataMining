@@ -1,12 +1,7 @@
-#include <iostream>
 #include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
-#include <boost/multi_array.hpp>
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
-#include <boost/lambda/lambda.hpp>
-#include <boost/lambda/bind.hpp>
+#include <boost/program_options.hpp>
 #include <cstdlib>
 
 #include "csv.hpp"
@@ -14,8 +9,9 @@
 
 using namespace std;
 using namespace boost;
+using namespace boost::program_options;
 
-static const size_t MAX_RELATED =10;
+
 typedef long item_type;
 
 struct str2item_type {
@@ -24,7 +20,26 @@ struct str2item_type {
     }
 };
 
-int main() {
+int main(int argc, char* argv[]) {
+
+
+    options_description opt("options");
+
+    opt.add_options()
+        ("help,h"                                   , "help")
+        ("r"      , value<size_t>()->default_value(10) , "max_related_items")
+        ("cache,c"                                  , "enable cache");
+
+    variables_map vm;
+    store(parse_command_line(argc, argv, opt), vm);
+    notify(vm);
+
+
+    if (vm.count("help")) {
+        cout << opt << endl;
+        return 1;
+    }
+
 
     ptr_vector<vector<item_type> > users;
     ptr_map<item_type, set<size_t> > items;
@@ -41,6 +56,6 @@ int main() {
 
     cf::transform_prefs(users, items);
 
-    cf::top_matches(items, MAX_RELATED);
+    cf::top_matches(items, vm["r"].as<size_t>(), vm.count("cache"));
     return 0;
 }

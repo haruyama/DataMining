@@ -1,9 +1,13 @@
+#pragma once
+
+#include <boost/multi_array.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <iostream>
 #include <set>
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
 #include "similarity.hpp"
 
 using namespace std;
@@ -23,20 +27,15 @@ namespace cf {
         cout << endl;
     }
 
-    //const double NOT_SCORED = -100;
-
     template<typename IT, typename UT>
     void top_matches(const ptr_map<IT, set<UT> >&  items,
-            const size_t max_items) {
+            const size_t max_items, const int cache) {
 
-        multi_array<double, 2> memo(extents[items.size()][items.size()]);
+        typedef boost::shared_ptr<multi_array<double, 2> > cache_array_ptr;
+        
+        cache_array_ptr memo;
 
-//        for(size_t i = 0; i < items.size(); ++i) {
-//            for(size_t j = 0; j < items.size(); ++j) {
-//                memo[i][j] = NOT_SCORED;
-//            }
-//        }
-
+        memo = cache_array_ptr(new multi_array<double, 2>(extents[items.size()][items.size()]));
 
         typedef ptr_container_detail::ref_pair<IT, const set<UT>* const> item_info;
 
@@ -51,11 +50,13 @@ namespace cf {
                 if (i == j) {
                     ++j;
                     continue;
-                } else if (i > j) {
-                    score = memo[j][i];
+                } else if (cache && i > j) {
+                    score = (*memo)[j][i];
                 } else {
                     score = similarity::tanimoto(item1.second, item2.second);
-                    memo[i][j] = score;
+                    if (cache) {
+                        (*memo)[i][j] = score;
+                    }
                 }
 
                 if (score > 0) {
@@ -79,7 +80,9 @@ namespace cf {
                             bind(&pair<IT,double>::second, _1),
                             bind(&pair<IT,double>::second, _2)));
             }
-            printout_score(item1.first, scores, max_items);
+            if (!scores.empty()) {
+                printout_score(item1.first, scores, max_items);
+            }
             ++i;
         }
     }

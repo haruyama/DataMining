@@ -1,3 +1,5 @@
+#pragma once
+
 #include <set>
 
 using namespace std;
@@ -11,6 +13,10 @@ namespace similarity {
                 set2->begin(),set2->end(),
                 inserter(interset, interset.begin()));
 
+        if (interset.empty()) {
+            return 0.0;
+        }
+
         return (double(interset.size()))/((set1->size())+(set2->size())-interset.size());
     }
 
@@ -20,6 +26,10 @@ namespace similarity {
         set_intersection(set1.begin(),set1.end(),
                 set2.begin(),set2.end(),
                 inserter(interset, interset.begin()));
+
+        if (interset.empty()) {
+            return 0.0;
+        }
 
         return (double(interset.size()))/((set1.size())+(set2.size())-interset.size());
     }

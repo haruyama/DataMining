@@ -3,7 +3,7 @@ TARGET = main
 CXX = ccache g++
 CXXFLAGS += -g -O3 -Wall
 # ASFLAGS +=
-LDFLAGS += -g -O3 -Wall
+LDFLAGS += -lboost_program_options
 INCLUDES += ../include
 
 .DEFAULT: main user

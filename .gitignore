@@ -4,3 +4,5 @@ main
 .omakedb*
 *~
 *.omc
+item
+user
