@@ -1,0 +1,12 @@
+SRCS = main
+TARGET = main
+CXX = ccache g++
+CXXFLAGS += -g -O3 -Wall
+# ASFLAGS +=
+LDFLAGS += -g -O3 -Wall
+INCLUDES += ../include
+
+.DEFAULT: main user
+
+CXXProgram(user, user)
+CXXProgram(main, main) 
