@@ -20,6 +20,21 @@ namespace similarity {
         return (double(interset.size()))/((set1->size())+(set2->size())-interset.size());
     }
 
+    template<typename T> inline double tanimoto(const set<T>* set1, const set<T>* set2, const size_t size1) {
+        set<T> interset;
+
+        set_intersection(set1->begin(),set1->end(),
+                set2->begin(),set2->end(),
+                inserter(interset, interset.begin()));
+
+        if (interset.empty()) {
+            return 0.0;
+        }
+
+        return (double(interset.size()))/(size1+(set2->size())-interset.size());
+    }
+
+
     template<typename T> inline double tanimoto(const set<T>& set1, const set<T>& set2) {
         set<T> interset;
 

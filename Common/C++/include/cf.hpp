@@ -45,6 +45,7 @@ namespace cf {
         size_t i = 0;
         BOOST_FOREACH(item_info item1, items) {
             vector< pair<IT, double> > scores;
+            size_t item1_size = item1.second->size();
 
             size_t j = 0;
             BOOST_FOREACH(item_info item2, items) {
@@ -56,7 +57,7 @@ namespace cf {
                 } else if (cache && i > j) {
                     score = (*memo)[j][i];
                 } else {
-                    score = similarity::tanimoto(item1.second, item2.second);
+                    score = similarity::tanimoto(item1.second, item2.second, item1_size);
                     if (cache) {
                         (*memo)[i][j] = score;
                     }
