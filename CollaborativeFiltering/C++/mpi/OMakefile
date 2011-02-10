@@ -1,0 +1,11 @@
+SRCS = main
+TARGET = main
+CXX = mpicxx
+CXXFLAGS += -g -O3 -Wall
+# ASFLAGS +=
+LDFLAGS += -lboost_serialization -lboost_mpi
+INCLUDES += ../include
+
+.PHONY: syntax
+
+.DEFAULT: $(CXXProgram $(TARGET), $(SRCS))
