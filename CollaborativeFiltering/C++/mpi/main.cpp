@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -9,7 +10,7 @@
 #include <boost/lambda/bind.hpp>
 #include <cstdlib>
 #include <boost/mpi.hpp>
-#include <boost/serialization/set.hpp>
+#include <boost/serialization/vector.hpp>
 #include <boost/ptr_container/serialize_ptr_map.hpp>
 
 #include "similarity.hpp"
@@ -24,8 +25,8 @@ const double NOT_SCORED = -100;
 
 typedef long item_type;
 typedef ptr_vector<vector<item_type> > user_items;
-typedef ptr_map<item_type, set<size_t> > item_users;
-typedef ptr_container_detail::ref_pair<item_type, const set<size_t>* const> item_info;
+typedef ptr_map<item_type, vector<size_t> > item_users;
+typedef ptr_container_detail::ref_pair<item_type, const vector<size_t>* const> item_info;
 
 void printout_score(item_type item_id, const vector<pair<item_type, double> >&  scores) {
 
@@ -39,13 +40,13 @@ void printout_score(item_type item_id, const vector<pair<item_type, double> >&  
 }
 
 
-void top_matches(const item_type item1_id, const ptr_map<item_type, set<size_t> >&  items,
+void top_matches(const item_type item1_id, const ptr_map<item_type, vector<size_t> >&  items,
 				 const size_t max_items) {
 
 
     vector< pair<item_type, double> > scores;
 
-    const set<size_t>* item1_set = items.find(item1_id)->second;
+    const vector<size_t>* item1_set = items.find(item1_id)->second;
 
     BOOST_FOREACH(item_info item2, items) {
         if (item1_id == item2.first) {
@@ -91,14 +92,14 @@ static void transform_prefs(const user_items& users,
     BOOST_FOREACH(vector<item_type> item_vector, users) {
         BOOST_FOREACH(item_type item_id, item_vector){
             item_set.insert(item_id);
-            ptr_map<item_type, set<size_t> >::iterator item_iter
+            ptr_map<item_type, vector<size_t> >::iterator item_iter
                 = items.find(item_id);
             if (item_iter != items.end()) {
-                (item_iter->second)->insert(user);
+                (item_iter->second)->push_back(user);
             } else {
-                set<size_t>* item_set(new set<size_t>);
-                item_set->insert(user);
-                items.insert(item_id, item_set);
+                vector<size_t>* item_v(new vector<size_t>);
+                item_v->push_back(user);
+                items.insert(item_id, item_v);
             }
         }
         ++user;
