@@ -1,0 +1,15 @@
+SRCS = main
+TARGET = main
+CXX = ccache g++
+CXXFLAGS += -std=gnu++0x -g -O3 -Wall
+# ASFLAGS +=
+LDFLAGS += -g -O3 -Wall
+INCLUDES += ../include
+
+.PHONY: syntax
+
+.DEFAULT: $(CXXProgram $(TARGET), $(SRCS))
+
+syntax:
+	CXXFLAGS += -fsyntax-only
+	$(CXXProgram $(TARGET), $(SRCS))

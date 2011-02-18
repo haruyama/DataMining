@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include <vector>
 #include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -21,26 +23,24 @@ using namespace boost;
 
 static const size_t MAX_RELATED =10;
 
-const double NOT_SCORED = -100;
-
 typedef long item_type;
 typedef ptr_vector<vector<item_type> > user_items;
 typedef ptr_map<item_type, vector<size_t> > item_users;
 typedef ptr_container_detail::ref_pair<item_type, const vector<size_t>* const> item_info;
 
-void printout_score(item_type item_id, const vector<pair<item_type, double> >&  scores) {
+void printout_score(ofstream& ofs, item_type item_id, const vector<pair<item_type, double> >&  scores) {
 
-    cout << item_id << ':';
+    ofs << item_id << ':';
     typedef pair<item_type, double> score;
     BOOST_FOREACH(score score_detail, scores) {
-        cout << score_detail.second << '|';
-        cout << score_detail.first << ',';
+        ofs << score_detail.second << '|';
+        ofs << score_detail.first << ',';
     }
-    cout << endl;
+    ofs << endl;
 }
 
 
-void top_matches(const item_type item1_id, const ptr_map<item_type, vector<size_t> >&  items,
+void top_matches(ofstream& ofs, const item_type item1_id, const ptr_map<item_type, vector<size_t> >&  items,
 				 const size_t max_items) {
 
 
@@ -77,7 +77,7 @@ void top_matches(const item_type item1_id, const ptr_map<item_type, vector<size_
                         bind(&pair<item_type,double>::second, _1),
                         bind(&pair<item_type,double>::second, _2)));
         }
-        printout_score(item1_id, scores);
+        printout_score(ofs, item1_id, scores);
     }
 }
 
@@ -121,7 +121,6 @@ int main(int argc, char** argv) {
     boost::mpi::environment env(argc, argv);
     boost::mpi::communicator world;
 
-
     if (world.rank() == 0) {
         /* read data */
         string line;
@@ -140,9 +139,6 @@ int main(int argc, char** argv) {
 
     mpi::broadcast(world, items, 0);
 
-//    cerr << world.rank() << " " << items.size() << endl;
-
-
     if (world.rank() == 0) {
         vector<item_type> item_vector;
         copy(item_set.begin(), item_set.end(), inserter(item_vector, item_vector.begin()));
@@ -150,8 +146,6 @@ int main(int argc, char** argv) {
         size_t item_size = item_vector.size();
         size_t child_size = world.size() -1 ;
         while(true) {
-
-//            cerr << index << ' ' << child_size << ' ' << item_size << endl;
 
             if (index >= item_size) {
                 break;
@@ -179,6 +173,10 @@ int main(int argc, char** argv) {
 
 
     } else {
+        stringstream filename;
+        filename << "output." << world.rank();
+        ofstream ofs(filename.str().c_str());
+
         while(true) {
             item_type item_id;
             world.recv(0, 0, item_id);
@@ -187,7 +185,7 @@ int main(int argc, char** argv) {
                 break;
             }
 
-            top_matches(item_id, items, MAX_RELATED);
+            top_matches(ofs, item_id, items, MAX_RELATED);
         }
 
 
