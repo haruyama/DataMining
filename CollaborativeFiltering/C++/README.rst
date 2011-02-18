@@ -37,8 +37,9 @@ https://github.com/haruyama/DataMining/tree/master/CollaborativeFiltering/C++/it
 
 Performance
 ^^^^^^^^^^^
+I used Intel(R) Core(TM) i7 CPU 920  @ 2.67GHz.
 
-120000 users and 280000 items: about 80 minites
+120000 users and 280000 items: about 80 minites 
 
 Using MPI
 #########
@@ -53,5 +54,6 @@ cat output.* | sort output
 
 Performance
 ^^^^^^^^^^^
+I used Intel(R) Core(TM) i7 CPU 920  @ 2.67GHz.
 
-120000 users and 280000 items | 6 processes (1 control process and 5 calcurating processes): about 20 minites
+120000 users and 280000 items | 6 processes (1 control process and 5 calcurating processes.): about 20 minites
