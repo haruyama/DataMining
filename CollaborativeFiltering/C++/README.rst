@@ -31,7 +31,7 @@ Programs
 StandAlone
 ##########
 
-https://github.com/haruyama/DataMining/tree/master/CollaborativeFiltering/C++/item-item5tem-item5
+https://github.com/haruyama/DataMining/tree/master/CollaborativeFiltering/C++/item-item5
 
 ./main <  users.csv > output
 
