@@ -47,9 +47,9 @@ Using MPI
 https://github.com/haruyama/DataMining/tree/master/CollaborativeFiltering/C++/mpi3
 
 
-rm output.*
-mpirun -np 6 ./main -stdin 0  <  users.csv
-cat output.* | sort output
+| rm output.*
+| mpirun -np 6 ./main -stdin 0  <  users.csv
+| cat output.* | sort output
 
 
 Performance
