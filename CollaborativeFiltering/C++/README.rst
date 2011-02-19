@@ -1,6 +1,17 @@
 Collaborative Filtering Sample
 ===============================
 
+Item-item Recommendation using Tanimono(Jaccard) Coefficient.
+
+There are rewritten versions of the codes in 2nd Chapter of 
+Programming Collective Intelligence ( http://oreilly.com/catalog/9780596529321/ )
+By Toby Segaran, O'Reilly Media, ISBN: 978-0-596-52932-1.
+
+License
+--------------
+
+GNU GENERAL PUBLIC LICENSE Version 3 (or any later version).
+
 File Formats
 --------------
 
