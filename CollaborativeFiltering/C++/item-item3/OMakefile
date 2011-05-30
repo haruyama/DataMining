@@ -1,7 +1,7 @@
 SRCS = main
 TARGET = main
 CXX = ccache g++
-CXXFLAGS += -g -O3 -Wall -DBOOST_MPI_HOMOGENIUS
+CXXFLAGS += -g -O3 -Wall
 # ASFLAGS +=
 LDFLAGS += -g -O3 -Wall
 INCLUDES += ../include

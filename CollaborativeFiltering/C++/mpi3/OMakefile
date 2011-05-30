@@ -3,7 +3,7 @@ TARGET = main
 CXX = mpicxx
 CXXFLAGS += -g -O3 -Wall
 # ASFLAGS +=
-LDFLAGS += -lboost_serialization -lboost_mpi
+LDFLAGS += -lboost_serialization -lboost_mpi -DBOOST_MPI_HOMOGENIUS
 INCLUDES += ../include
 
 .PHONY: syntax
